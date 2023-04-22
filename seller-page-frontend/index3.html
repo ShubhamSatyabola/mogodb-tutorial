@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>SELLER PAGE</title>
+</head>
+<body>
+    <header>
+        <h1 class=" text-center">SELLER PAGE</h1>
+        <p class="text-center">ADD YOUR PRODUCTS HERE</p>
+        <hr>
+    </header>
+    <hr>
+    
+        <form id="addform">
+            <div class="form-group">
+                <label for="name">Product-Name</label>
+                <input type="text" id="name" class="form-control" name="product_name"  pattern=[A-Z\sa-z]{3,20} required>
+              </div>
+              <div class="form-group">
+                <label for="cost">Product-Cost</label>
+                <input type="text" id="cost" class="form-control" name="product_cost"  required>
+              </div>
+            <div>
+                <label for="Category" class="form-label">Product-Category</label>
+            <select id="Category" class="form-select" >
+                <option value="Stationary">Stationary</option>
+                <option value="Clothes">Clothes</option>
+                <option value="Electric">Electric</option>
+                
+            </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Add Product</button>
+            
+        </form><hr>
+        <h2>STATIONARY</h2>
+        <p id="STATIONARY"></p>
+        <h2>CLOTHES</h2>
+        <p id="CLOTHES"></p>
+        <h2>ELECTRIC</h2>
+        <p id="ELECTRIC"></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="E:\seller page project\seller-page-frontend\seller.js">
+
+    </script>
+</body>
+</html>
