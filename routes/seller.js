@@ -6,11 +6,11 @@ const sellerController = require('../controllers/admin');
 
 const router = express.Router();
 
-router.get('/get-product', sellerController.getAddProduct)
+//router.get('/get-product', sellerController.getAddProduct)
 
 router.post('/post-product', sellerController.postAddProduct)
 
-router.delete('/delete-product/:productId', sellerController.postDeleteProduct)
+//router.delete('/delete-product/:productId', sellerController.postDeleteProduct)
 
 
 

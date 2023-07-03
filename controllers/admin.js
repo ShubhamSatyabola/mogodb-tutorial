@@ -14,12 +14,15 @@ exports.postAddProduct = async (req, res, next) => {
   try{const name = req.body.name;
   const cost = req.body.cost;
   const category = req.body.category;
-  const data = await Product.create({
-    name: name,
-    cost: cost,
-    category: category
+  const product = new Product(name,cost,category)
+  product.save()
+  .then(result=>{
+    console.log(result,'saved')
+    res.status(201).json({newProduct: result})
   })
-  res.status(201).json({newProduct: data})
+  .catch(err=>console.log(err))
+  
+  //res.status(201).json({newProduct: data})
 }catch(err){
   console.log(err)
 }

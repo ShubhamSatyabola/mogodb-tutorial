@@ -4,7 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var cors = require('cors');
 //const errorController = require('./controllers/error');
-const sequelize = require('./util/database');
+//const sequelize = require('./util/database');
+const mongodbConnect = require('./util/database');
 
 
 const app = express();
@@ -21,14 +22,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(sellerRoutes);
 
-
-
-
-sequelize.sync()
-.then(result=>{
+mongodbConnect.mongodbConnect(()=>{
+    //console.log(client)
+    //console.log('user connected')
     app.listen(3000)
-    
-    //  console.log(result)
 })
-.catch(err=>console.log(err))
+
+
+
+// sequelize.sync()
+// .then(result=>{
+//     app.listen(3000)
+    
+//     //  console.log(result)
+// })
+// .catch(err=>console.log(err))
 

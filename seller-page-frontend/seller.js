@@ -21,6 +21,7 @@ async function setlocalStorage(e){
     
     const data = {name , cost , category};
     const response = await axios.post('http://localhost:3000/post-product', data)
+    console.log('done')
     showOnScreen(response.data.newProduct);
     }catch (err){
         console.log(err)
