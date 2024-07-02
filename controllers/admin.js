@@ -35,3 +35,17 @@ exports.postAddProduct = async (req, res, next) => {
     }
   }
 
+
+ exports.updateProduct = async (req, res, next) => {
+   try {
+     const name = req.body.name;
+     const cost = req.body.cost;
+     const category = req.body.category;
+     const _id = req.body._id;
+     const product = new Product(name,cost,category,_id)
+     await product.save();
+     res.status(201).json({updatedProduct: product})
+   } catch (err) {
+     console.log(err);
+   }
+ };

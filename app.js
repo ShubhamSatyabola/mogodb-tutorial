@@ -10,16 +10,17 @@ const mongodbConnect = require('./util/database');
 const app = express();
 app.use(cors());
 
-//db28hJM1chso019J   == passmongo
+
 
 const sellerRoutes = require('./routes/seller')
-
+const userRoute  = require('./routes/user')
 
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(sellerRoutes);
+app.use(userRoute)
 
 mongodbConnect.mongodbConnect(()=>{
     //console.log(client)

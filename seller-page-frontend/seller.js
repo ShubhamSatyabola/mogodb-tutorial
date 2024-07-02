@@ -19,20 +19,37 @@ async function setlocalStorage(e){
     var name = document.getElementById('name').value;
     var cost = document.getElementById('cost').value;
     var category = document.getElementById('Category').value;
+    var _id = document.getElementById("editId").value;
+        // console.log(_id);
+    const data = { name, cost, category };
+    if(_id){
+        data._id = _id;
+        const response = await axios.put(
+          "http://localhost:3000/update-product",
+          data
+        );
+       console.log(response);
+window.location.reload()
+    }
+    else{
+        const response = await axios.post(
+          "http://localhost:3000/post-product",
+          data
+        );
+        console.log("done");
+        showOnScreen(response.data.newProduct);
+    }
     
-    const data = {name , cost , category};
-    const response = await axios.post('http://localhost:3000/post-product', data)
-    console.log('done')
-    showOnScreen(response.data.newProduct);
+    
     }catch (err){
         console.log(err)
     }
 }
 async function showOnScreen(data){
     try{
-        document.getElementById('name').value = " ";
-        document.getElementById('cost').value = " ";
-        document.getElementById('Category').value = " ";
+        document.getElementById('name').value = "";
+        document.getElementById('cost').value = "";
+        document.getElementById('Category').value = "";
 
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = 'Delete';
@@ -43,7 +60,7 @@ async function showOnScreen(data){
         displayElement.innerHTML = `Product Name <b>${data.name}</b> and Price is <b>${data.cost}</b> Category is <b>${data.category}</b> `;
         displayElement.appendChild(deleteButton);
 
-        // displayElement.appendChild(editButton);
+        displayElement.appendChild(editButton);
         
         if (data.category === 'Stationary') {
             STATIONARY.appendChild(displayElement);
@@ -63,11 +80,13 @@ async function showOnScreen(data){
             }
             alert(res.data.message)
         }
-        // editButton.onClick = () =>{
-        //     document.getElementById('name').value = data.name;
-        //     document.getElementById('cost').value = data.cost;
-        //     document.getElementById('Category').value = data.category;
-        // }
+        editButton.onclick = () =>{
+            console.log("clicked");
+            document.getElementById('name').value = data.name;
+            document.getElementById('cost').value = data.cost;
+            document.getElementById('Category').value = data.category;
+            document.getElementById("editId").value = data._id;
+        }
         
     }catch(err){
         console.log(err);

@@ -1,4 +1,4 @@
-const path = require('path');
+
 
 const express = require('express');
 
@@ -9,6 +9,9 @@ const router = express.Router();
 router.get('/get-product', sellerController.getAddProduct)
 
 router.post('/post-product', sellerController.postAddProduct)
+
+
+router.put("/update-product", sellerController.updateProduct);
 
 router.delete('/delete-product/:productId', sellerController.postDeleteProduct)
 
