@@ -5,6 +5,7 @@ form.addEventListener('submit', setlocalStorage)
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const res = await axios.get('http://localhost:3000/get-product');
+        console.log(res);
         for(i in res.data.allProducts){
             showOnScreen(res.data.allProducts[i])
         }
@@ -35,10 +36,14 @@ async function showOnScreen(data){
 
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = 'Delete';
+        const editButton = document.createElement("button");
+        editButton.innerHTML = "Edit";
 
         const displayElement = document.createElement('div');
         displayElement.innerHTML = `Product Name <b>${data.name}</b> and Price is <b>${data.cost}</b> Category is <b>${data.category}</b> `;
         displayElement.appendChild(deleteButton);
+
+        // displayElement.appendChild(editButton);
         
         if (data.category === 'Stationary') {
             STATIONARY.appendChild(displayElement);
@@ -47,8 +52,8 @@ async function showOnScreen(data){
         } else {
             ELECTRIC.appendChild(displayElement);
         }
-        deleteButton.onclick = () => {
-            axios.delete(`http://localhost:3000/delete-product/${data.id}`)
+        deleteButton.onclick = async() => {
+            const res = await axios.delete(`http://localhost:3000/delete-product/${data._id}`)
             if (data.category === 'Stationary') {
                 STATIONARY.removeChild(displayElement);
             } else if (data.category === 'Clothes') {
@@ -56,7 +61,13 @@ async function showOnScreen(data){
             } else {
                 ELECTRIC.removeChild(displayElement);
             }
+            alert(res.data.message)
         }
+        // editButton.onClick = () =>{
+        //     document.getElementById('name').value = data.name;
+        //     document.getElementById('cost').value = data.cost;
+        //     document.getElementById('Category').value = data.category;
+        // }
         
     }catch(err){
         console.log(err);

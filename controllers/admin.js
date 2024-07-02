@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 exports.getAddProduct = async (req, res, next) => {
     try{
-      const products = await Product.findAll();
+      const products = await Product.fetchAll();
       res.status(201).json({allProducts: products})
 
     }catch(err){
@@ -15,14 +15,10 @@ exports.postAddProduct = async (req, res, next) => {
   const cost = req.body.cost;
   const category = req.body.category;
   const product = new Product(name,cost,category)
-  product.save()
-  .then(result=>{
-    console.log(result,'saved')
-    res.status(201).json({newProduct: result})
-  })
-  .catch(err=>console.log(err))
+  await product.save();
   
-  //res.status(201).json({newProduct: data})
+  
+  res.status(201).json({newProduct: product})
 }catch(err){
   console.log(err)
 }
@@ -31,9 +27,9 @@ exports.postAddProduct = async (req, res, next) => {
 
   exports.postDeleteProduct = async(req, res, next) => {
     try{const prodId = req.params.productId;
-    const product = await Product.findByPk(prodId);
-    product.destroy()
-    
+      console.log(prodId);
+    await Product.delete(prodId);
+    res.status(200).json({message:"deleted successfully"})
     }catch(err){
       console.log(err)
     }
