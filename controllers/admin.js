@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 exports.getAddProduct = async (req, res, next) => {
     try{
-      const products = await Product.fetchAll();
+      const products = await Product.fetchByUserId(req.user._id);
       res.status(201).json({allProducts: products})
 
     }catch(err){
@@ -14,7 +14,8 @@ exports.postAddProduct = async (req, res, next) => {
   try{const name = req.body.name;
   const cost = req.body.cost;
   const category = req.body.category;
-  const product = new Product(name,cost,category)
+  console.log(req.user._id);
+  const product = new Product(name,cost,category,null,req.user._id)
   await product.save();
   
   
@@ -41,8 +42,9 @@ exports.postAddProduct = async (req, res, next) => {
      const name = req.body.name;
      const cost = req.body.cost;
      const category = req.body.category;
+     const userId = req.user._id
      const _id = req.body._id;
-     const product = new Product(name,cost,category,_id)
+     const product = new Product(name,cost,category,_id ,userId)
      await product.save();
      res.status(201).json({updatedProduct: product})
    } catch (err) {

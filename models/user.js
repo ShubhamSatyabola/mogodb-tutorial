@@ -20,7 +20,7 @@ class User{
           .collection("users")
           .find({ _id: new ObjectId(id) })
           .next()
-          .then((res) => console.log(res))
+          .then((res) =>  res)
           .catch((err) => console.log(error));
     }
 }
