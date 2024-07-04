@@ -33,8 +33,20 @@ class Product {
   static fetchByUserId(id) {
     const db = getDb();
     // fin method in mongo doesn't return any data else it return cursor  and cursor is an object which help us to go through the whole document
-    return db.collection("products").find({userId : new ObjectId(id)}).toArray();
+    return db
+      .collection("products")
+      .find({ userId: new ObjectId(id) })
+      .toArray();
   }
+  static fetchById(id) {
+    const db = getDb();
+    // fin method in mongo doesn't return any data else it return cursor  and cursor is an object which help us to go through the whole document
+    return db
+      .collection("products")
+      .find({ _id: new ObjectId(id) })
+      .next()
+  }
+
   static delete(id) {
     const db = getDb();
     return db

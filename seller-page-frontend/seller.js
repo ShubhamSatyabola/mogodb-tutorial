@@ -55,12 +55,15 @@ async function showOnScreen(data){
         deleteButton.innerHTML = 'Delete';
         const editButton = document.createElement("button");
         editButton.innerHTML = "Edit";
+        const cartButton = document.createElement("button");
+        cartButton.innerHTML = "Add To Cart";
 
         const displayElement = document.createElement('div');
         displayElement.innerHTML = `Product Name <b>${data.name}</b> and Price is <b>${data.cost}</b> Category is <b>${data.category}</b> `;
         displayElement.appendChild(deleteButton);
 
         displayElement.appendChild(editButton);
+        displayElement.appendChild(cartButton);
         
         if (data.category === 'Stationary') {
             STATIONARY.appendChild(displayElement);
@@ -86,6 +89,17 @@ async function showOnScreen(data){
             document.getElementById('cost').value = data.cost;
             document.getElementById('Category').value = data.category;
             document.getElementById("editId").value = data._id;
+        }
+
+        cartButton.onclick = async () =>{
+            console.log("Add to cart");
+            const res = await axios.post(
+              `http://localhost:3000/post-cart` ,data
+            );
+            console.log(res);
+            if(res.status == 201){
+                window.location.href="./cart.html";
+            }
         }
         
     }catch(err){

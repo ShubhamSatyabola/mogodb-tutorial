@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <style>
+    .cart-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-item-info span {
+      margin-bottom: 5px;
+    }
+    .cart-item-buttons {
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-item-buttons button {
+      margin-top: 5px;
+    }
+    #order-cart-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="cart-container"></div>
+  <button id="order-cart-button">Order Cart</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    async function fetchCartItems() {
+      try {
+        const res = await axios.get('http://localhost:3000/get-cart');
+        console.log(res);
+        for (let item of res.data) {
+          showCartItem(item);
+        }
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    }
+
+    function showCartItem(item) {
+      const cartContainer = document.getElementById('cart-container');
+
+      const cartItemDiv = document.createElement('div');
+      cartItemDiv.className = 'cart-item';
+
+      const cartItemInfo = document.createElement('div');
+      cartItemInfo.className = 'cart-item-info';
+
+      const itemName = document.createElement('span');
+      itemName.textContent = `Name: ${item.name}`;
+      cartItemInfo.appendChild(itemName);
+
+      const itemCategory = document.createElement('span');
+      itemCategory.textContent = `Category: ${item.category}`;
+      cartItemInfo.appendChild(itemCategory);
+
+      const itemQuantity = document.createElement('span');
+      itemQuantity.textContent = `Quantity: ${item.quantity}`;
+      cartItemInfo.appendChild(itemQuantity);
+
+      const itemCost = document.createElement('span');
+      itemCost.textContent = `Cost: $${item.cost}`;
+      cartItemInfo.appendChild(itemCost);
+
+      const cartItemButtons = document.createElement('div');
+      cartItemButtons.className = 'cart-item-buttons';
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.onclick = () => deleteCartItem(item._id, cartItemDiv);
+      cartItemButtons.appendChild(deleteButton);
+
+      cartItemDiv.appendChild(cartItemInfo);
+      cartItemDiv.appendChild(cartItemButtons);
+
+      cartContainer.appendChild(cartItemDiv);
+    }
+
+    async function deleteCartItem(itemId, cartItemElement) {
+      try {
+        const res = await axios.delete(`http://localhost:3000/delete-cart-item/${itemId}`);
+        if (res.status === 200) {
+          cartItemElement.remove();
+        }
+      } catch (error) {
+        console.error('Error deleting cart item:', error);
+      }
+    }
+
+    async function orderCart() {
+      try {
+        const res = await axios.post('http://localhost:3000/order-cart');
+        if (res.status === 201) {
+          alert('Order placed successfully!');
+          window.location.href = './index3.html'
+        }
+      } catch (error) {
+        console.error('Error ordering cart:', error);
+      }
+    }
+
+    // Fetch and display cart items on page load
+    fetchCartItems();
+
+    // Add event listener to order button
+    document.getElementById('order-cart-button').addEventListener('click', orderCart);
+  </script>
+</body>
+</html>
