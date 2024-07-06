@@ -61,11 +61,11 @@
       cartItemInfo.className = 'cart-item-info';
 
       const itemName = document.createElement('span');
-      itemName.textContent = `Name: ${item.name}`;
+      itemName.textContent = `Name: ${item.productId.name}`;
       cartItemInfo.appendChild(itemName);
 
       const itemCategory = document.createElement('span');
-      itemCategory.textContent = `Category: ${item.category}`;
+      itemCategory.textContent = `Category: ${item.productId.category}`;
       cartItemInfo.appendChild(itemCategory);
 
       const itemQuantity = document.createElement('span');
@@ -73,7 +73,7 @@
       cartItemInfo.appendChild(itemQuantity);
 
       const itemCost = document.createElement('span');
-      itemCost.textContent = `Cost: $${item.cost}`;
+      itemCost.textContent = `Cost: $${item.productId.cost}`;
       cartItemInfo.appendChild(itemCost);
 
       const cartItemButtons = document.createElement('div');

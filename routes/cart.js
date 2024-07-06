@@ -1,6 +1,4 @@
 const express = require("express");
-
-const sellerController = require("../controllers/admin");
 const { authorize } = require("../middleware/authMiddleware");
 const {addToCart, getCart, deleteCart, createOrder} = require("../controllers/cart")
 const router = express.Router();

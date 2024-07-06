@@ -5,7 +5,7 @@ exports.addToCart = async(req, res , next) => {
     try {
          const productId = req.body._id;
       //   console.log(productId)
-         const product = await Product.fetchById(productId);
+         const product = await Product.findById(productId);
      //    console.log(product);
          const cartItem = await req.user.addToCart(product);
        //  console.log(cartItem);
@@ -21,8 +21,9 @@ exports.addToCart = async(req, res , next) => {
 
 exports.getCart = async (req, res, next) => {
   try {
-    const cart = await req.user.getCart();
-     res.status(200).json(cart);
+    const cart = await User.findById({_id:req.user.id}).select('cart').populate("cart.items.productId")
+    console.log(cart);
+     res.status(200).json(cart.cart.items);
    
   } catch (err) {
     console.log(err);
