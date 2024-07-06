@@ -34,9 +34,13 @@ exports.deleteCart = async (req,res,next) =>{
     const prodId = req.params.id ;
     //console.log(prodId, "prodId");
     try {
-        const cart = await req.user.deleteCartItem(prodId);
-        res.status(200).json({message:"successfully deleted", cart})
-        } catch (err) {
+      const updatedCartItems = req.user.cart.items.filter(
+        (item) => item.productId.toString() !== prodId.toString()
+      );
+      req.user.cart.items = updatedCartItems
+      req.user.save()
+      res.status(200).json({ message: "successfully deleted", updatedCartItems});
+    } catch (err) {
             console.log(err);
             }
 

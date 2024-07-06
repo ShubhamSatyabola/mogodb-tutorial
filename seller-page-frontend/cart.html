@@ -81,7 +81,7 @@
 
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
-      deleteButton.onclick = () => deleteCartItem(item._id, cartItemDiv);
+      deleteButton.onclick = () => deleteCartItem(item.productId._id, cartItemDiv);
       cartItemButtons.appendChild(deleteButton);
 
       cartItemDiv.appendChild(cartItemInfo);
