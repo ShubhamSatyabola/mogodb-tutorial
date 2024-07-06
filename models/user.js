@@ -1,105 +1,126 @@
-const getDb = require("../util/database").getDb;
-const { ObjectId } = require("mongodb");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-class User {
-  constructor(username, email, phone, cart ,id , orders) {
-    this.username = username;
-    this.email = email;
-    this.phone = phone;
-    this.cart = cart ;
+const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    items: [
+      {
+        productId: { type: Schema.Types.ObjectId, ref:"Product" , required: true },
+        quantity: { type: String, required: true },
+      },
+    ],
+  },
+});
 
-    this._id = id ? new ObjectId(id) : null;
-    this.orders = orders // [] of order
+module.exports = mongoose.model("User", userSchema);
 
-  }
+// const getDb = require("../util/database").getDb;
+// const { ObjectId } = require("mongodb");
 
-  save() {
-    const db = getDb();
-    return db
-      .collection("users")
-      .insertOne(this)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(error));
-  }
+// class User {
+//   constructor(username, email, phone, cart ,id , orders) {
+//     this.username = username;
+//     this.email = email;
+//     this.phone = phone;
+//     this.cart = cart ;
 
-  addToCart(product) {
-    const db = getDb();
-    
-   
-     const cartIndex = this.cart.items.findIndex(
-        (item) => item.productId.toString() === product._id.toString()
-      );
-   
-    console.log(cartIndex , "cartIndex");
-    let newQuantity = 1
-    const updatedCartItems = [...this.cart.items]
+//     this._id = id ? new ObjectId(id) : null;
+//     this.orders = orders // [] of order
 
-    
-    if(cartIndex >= 0){
-      newQuantity = this.cart.items[cartIndex].quantity + 1 ;
-      updatedCartItems[cartIndex].quantity = newQuantity
-    }
-    else{
-      updatedCartItems.push({ productId:new ObjectId(product._id), quantity: newQuantity });
-    }
+//   }
 
-    const updatedCart = {items:updatedCartItems};
-    return db
-      .collection("users")
-      .updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } })
-  }
+//   save() {
+//     const db = getDb();
+//     return db
+//       .collection("users")
+//       .insertOne(this)
+//       .then((res) => console.log(res))
+//       .catch((err) => console.log(error));
+//   }
 
-  getCart(){
-    const db = getDb();
-    const productIds = this.cart.items.map(item => item.productId)
-    return db.collection('products').find({_id:{$in : productIds}}).toArray()
-    .then(products => {
-      return products.map(product => {
-        return {
-          ...product,
-          quantity: this.cart.items.find(item => item.productId.toString() === product._id.toString()).quantity
-        }
-      })
-    })
-  }
+//   addToCart(product) {
+//     const db = getDb();
 
-  //delete-cart-item
-  deleteCartItem(productId){
-    const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString())
-    const updatedCart = {items:updatedCartItems};
-    return getDb()
-    .collection('users')
-    .updateOne({ _id: new ObjectId(this._id) }, { $set: { 
-      cart: updatedCart
-      } })
-    }
+//      const cartIndex = this.cart.items.findIndex(
+//         (item) => item.productId.toString() === product._id.toString()
+//       );
 
+//     console.log(cartIndex , "cartIndex");
+//     let newQuantity = 1
+//     const updatedCartItems = [...this.cart.items]
 
-  createOrder(){
-    const updateOrders = [...this.orders]
-    updateOrders.push({items:this.cart.items})
-    return getDb()
-    .collection('users')
-    .updateOne({ _id: new ObjectId(this._id) }, { $set: {
-      cart: {items:[]},
-      orders:updateOrders
-      } })
-      
-  }
+//     if(cartIndex >= 0){
+//       newQuantity = this.cart.items[cartIndex].quantity + 1 ;
+//       updatedCartItems[cartIndex].quantity = newQuantity
+//     }
+//     else{
+//       updatedCartItems.push({ productId:new ObjectId(product._id), quantity: newQuantity });
+//     }
 
+//     const updatedCart = {items:updatedCartItems};
+//     return db
+//       .collection("users")
+//       .updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } })
+//   }
 
+//   getCart(){
+//     const db = getDb();
+//     const productIds = this.cart.items.map(item => item.productId)
+//     return db.collection('products').find({_id:{$in : productIds}}).toArray()
+//     .then(products => {
+//       return products.map(product => {
+//         return {
+//           ...product,
+//           quantity: this.cart.items.find(item => item.productId.toString() === product._id.toString()).quantity
+//         }
+//       })
+//     })
+//   }
 
-  
+//   //delete-cart-item
+//   deleteCartItem(productId){
+//     const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString())
+//     const updatedCart = {items:updatedCartItems};
+//     return getDb()
+//     .collection('users')
+//     .updateOne({ _id: new ObjectId(this._id) }, { $set: {
+//       cart: updatedCart
+//       } })
+//     }
 
-  static findById(id) {
-    const db = getDb();
-    return db
-      .collection("users")
-      .find({ _id: new ObjectId(id) })
-      .next()
-      .then((res) => res)
-      .catch((err) => console.log(error));
-  }
-}
+//   createOrder(){
+//     const updateOrders = [...this.orders]
+//     updateOrders.push({items:this.cart.items})
+//     return getDb()
+//     .collection('users')
+//     .updateOne({ _id: new ObjectId(this._id) }, { $set: {
+//       cart: {items:[]},
+//       orders:updateOrders
+//       } })
 
-module.exports = User;
+//   }
+
+//   static findById(id) {
+//     const db = getDb();
+//     return db
+//       .collection("users")
+//       .find({ _id: new ObjectId(id) })
+//       .next()
+//       .then((res) => res)
+//       .catch((err) => console.log(error));
+//   }
+// }
+
+// module.exports = User;

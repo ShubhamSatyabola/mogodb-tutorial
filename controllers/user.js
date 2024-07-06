@@ -3,7 +3,7 @@ const User = require('../models/user')
 exports.addUser = async (req,res,next) =>{
     try{
         const {username , email, phone} = req.body;
-        const user = new User(username , email, phone);
+        const user = new User({username , email, phone});
         await user.save()
         res.status(201).json({user , message:"added successfully"})
     }

@@ -5,7 +5,8 @@ try {
     const user = await User.findById("66844c37a16cb80c2bff9a43");
     console.log((user));
     if(user){
-         req.user = new User(user.username ,user.email ,user.phone , user.cart , user._id ,user.orders);
+        //  req.user = new User(user.username ,user.email ,user.phone , user.cart , user._id ,user.orders);
+        req.user = user;
          next();
     }
    
