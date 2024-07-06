@@ -21,9 +21,9 @@ exports.addToCart = async(req, res , next) => {
 
 exports.getCart = async (req, res, next) => {
   try {
-    const cart = await User.findById({_id:req.user.id}).select('cart').populate("cart.items.productId")
-    console.log(cart);
-     res.status(200).json(cart.cart.items);
+    const cart = await req.user.cart.populate("items.productId")
+    // console.log(cart);
+     res.status(200).json(cart.items);
    
   } catch (err) {
     console.log(err);
